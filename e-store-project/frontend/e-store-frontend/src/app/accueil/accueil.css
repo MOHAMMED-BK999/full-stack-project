@@ -1,0 +1,79 @@
+.hero {
+  width: 100%;
+  height: 694px;
+  background-color: #f9f6f1;
+  padding-top: 60px;
+  
+}
+
+.par {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 400px;
+  height: 200px;
+  position: relative;
+  top: 100px;
+  left: 20px;
+  padding-left: 20px;
+}
+.par h1 span {
+  color: #c8502a;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 40px;
+}
+.par p {
+  color: #30302e;
+  font-size: medium;
+  font-family: "Montserrat", "Poppins", sans-serif;
+  
+}
+.buttDiv{
+  position: relative;
+  top: 25px;
+}
+.butt{
+  width: 150px;
+  height: 40px;
+  border: black solid 1px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.butt1{
+  margin-right: 20px;
+  background-color: black;
+  color: white;
+}
+
+
+footer{
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  top: 284px;
+  background-color: #1a1714;
+  color: white;
+  padding-top: 0px;
+  padding-left: 0px;
+  right: 10;
+}
+
+footer div{
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.numbers{
+  color: #e8b87a;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 30px;
+}
+
+.text{
+  font-family: "Montserrat", "Poppins", sans-serif;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 15px;
+}

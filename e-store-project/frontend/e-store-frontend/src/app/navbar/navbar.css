@@ -7,10 +7,18 @@ nav {
   justify-content: space-between;
   align-content: center;
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.187);
+  position: fixed;
+  top:  0px;
+  z-index: 10;
+  padding:10px
+  ;
 }
 
 .name {
   align-self: center;
+}
+.name span{
+  color: #c8502a;
 }
 .layout {
   list-style: none;
@@ -23,20 +31,22 @@ nav {
 .layout ul a {
   text-decoration: none;
   color: #30302e;
+  margin: 10px;
 }
 .svg {
   width: 20px;
   height: 20px;
-  /* position: relative;
-  top: 10px; */
-  /* align-self: center; */
+
 }
 .longin {
   display: flex;
+  width: 30;
+  height: 30;
   border: 0.7px solid rgba(0, 0, 0, 0.187);
   border-radius: 30px;
-  padding: 9px;
-  margin: 10px;
+  padding: 5px;
+  margin-right: 10px;
+  
   justify-content: center;
 }
 .longin a{
@@ -47,4 +57,5 @@ nav {
 .longin a span{
   position: relative;
   bottom: 3px;
+  
 }
