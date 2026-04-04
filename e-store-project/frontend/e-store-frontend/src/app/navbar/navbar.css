@@ -1,28 +1,25 @@
-.navbar {
+
+nav {
+  background-color: #ffffffff;
+  width: 100%;
+  height: 55px;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  background: #1976d2;
-  padding: 10px 20px;
-  color: white;
+  align-content: center;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.187);
 }
 
-.logo {
-  margin: 0;
+.name {
+  align-self: center;
 }
-
-.nav-links {
+.layout{
   list-style: none;
-  display: flex;
-  gap: 20px;
+  align-self: center;
 }
 
-.nav-links a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-}
-
-.nav-links a:hover {
-  text-decoration: underline;
+.layout ul {
+  
+  display: inline;
+  
 }
