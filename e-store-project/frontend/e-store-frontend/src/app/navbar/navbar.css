@@ -1,4 +1,3 @@
-
 nav {
   background-color: #ffffffff;
   width: 100%;
@@ -13,13 +12,39 @@ nav {
 .name {
   align-self: center;
 }
-.layout{
+.layout {
   list-style: none;
   align-self: center;
 }
 
 .layout ul {
-  
   display: inline;
-  
+}
+.layout ul a {
+  text-decoration: none;
+  color: #30302e;
+}
+.svg {
+  width: 20px;
+  height: 20px;
+  /* position: relative;
+  top: 10px; */
+  /* align-self: center; */
+}
+.longin {
+  display: flex;
+  border: 0.7px solid rgba(0, 0, 0, 0.187);
+  border-radius: 30px;
+  padding: 9px;
+  margin: 10px;
+  justify-content: center;
+}
+.longin a{
+  text-decoration: none;
+  color: #30302e;
+  align-self: center;
+}
+.longin a span{
+  position: relative;
+  bottom: 3px;
 }
