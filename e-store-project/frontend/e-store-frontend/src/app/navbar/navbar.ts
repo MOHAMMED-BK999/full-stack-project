@@ -8,12 +8,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.css'],
 })
 export class Navbar {
-
-  isActive= true;
-  Active(){
-    this.isActive=true;
-  }
-  notActive(){
-    this.isActive=false;
-  }
 }
