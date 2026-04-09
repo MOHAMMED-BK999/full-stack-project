@@ -1,10 +1,11 @@
+/* Container & Card Base */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 80px);
   background-color: #faf9f8;
-  padding: 2.2rem;
+  padding: 2rem;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -14,17 +15,33 @@
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   width: 100%;
-  max-width: 420px;
-  position: relative;
-  top: 31px;
+  max-width: 480px; /* Slightly wider for the two-column row */
 }
 
 .login-card h2 {
-  margin: 0 0 1.5rem;
-  color: #c04e33;
+  margin: 0 0 0.25rem;
+  color: #c04e33; /* NexShop Orange */
   font-size: 1.5rem;
   font-weight: 700;
   text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  margin-top: 0;
+}
+
+/* Form Layout & Inputs */
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.half-width {
+  flex: 1;
 }
 
 .form-group {
@@ -39,9 +56,9 @@
   font-weight: 500;
 }
 
-.form-group input[type='email'],
-.form-group input[type='password'],
-.form-group input[type='text'] {
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"] {
   width: 100%;
   padding: 0.75rem 1rem;
   background-color: #f5f5f5;
@@ -61,8 +78,16 @@
 
 .form-group input.is-invalid {
   border-color: #dc3545;
+  background-color: #fff8f8;
 }
 
+.error-text {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+/* Password Wrapper with Eye Icon */
 .password-wrapper {
   position: relative;
   display: flex;
@@ -86,10 +111,8 @@
   height: 20px;
 }
 
+/* Terms & Conditions Checkbox */
 .form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 1.5rem;
   font-size: 0.85rem;
 }
@@ -102,23 +125,24 @@
   cursor: pointer;
 }
 
-.forgot-password {
+.terms-link {
   color: #333;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.forgot-password:hover {
+.terms-link:hover {
   color: #d85a3c;
 }
 
+/* Primary Submit Button */
 .btn-login {
   width: 100%;
   padding: 0.85rem;
   background-color: #d85a3c;
   color: white;
   border: none;
-  border-radius: 25px; /* Pill shaped button */
+  border-radius: 25px; /* Pill shaped */
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -134,65 +158,12 @@
   cursor: not-allowed;
 }
 
-/* .divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 1.5rem 0;
-  color: #666;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid #ddd;
-}
-
-.divider span {
-  padding: 0 15px;
-}
-
-.social-login {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.btn-social {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn-social:hover {
-  background-color: #f0f0f0;
-}
-
-.social-icon {
-  width: 20px;
-  height: 20px;
-} */
-
+/* Footer Link */
 .register-link {
   text-align: center;
+  margin-top: 1.5rem;
   font-size: 0.9rem;
   color: #222;
-  position: relative;
-  top: 10px;
 }
 
 .register-link a {

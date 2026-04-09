@@ -27,21 +27,29 @@
   font-family: "Montserrat", "Poppins", sans-serif;
   
 }
-.buttDiv{
+.btnDiv{
   position: relative;
   top: 25px;
+  display: flex;
+  flex-direction: row;
 }
-.butt{
-  width: 150px;
-  height: 40px;
+.btn{
+  width: 175px;
+  height: 38px;
   border: black solid 1px;
   border-radius: 5px;
-  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  color: black;
+  align-items: center;
+  
 }
-.butt1{
+
+.btn1{
   margin-right: 20px;
   background-color: black;
-  color: white;
+  color: white !important;
 }
 
 
