@@ -1,1 +1,50 @@
-<p>commands works!</p>
+<div class="page-wrapper">
+  <div class="main-container">
+    <div class="header-action">
+      <h1 class="title">My Orders</h1>
+      <div class="summary-badge" *ngIf="myOrders.length > 0">
+        Total Spent: <strong>{{ getTotal() | number:'1.2-2' }} EUR</strong>
+      </div>
+    </div>
+
+    <div class="orders-list">
+      <div *ngIf="myOrders.length === 0" class="empty-state">
+        <div class="empty-icon">Cart</div>
+        <h2>Your order list is empty</h2>
+        <p>Purchased items from the catalog will appear here.</p>
+      </div>
+
+      <div *ngFor="let order of myOrders" class="order-card">
+        <div class="order-info">
+          <div class="img-wrapper">
+            <img [src]="order.imageUrl" [alt]="order.productName">
+          </div>
+          <div class="text-details">
+            <span class="order-date">{{ order.date | date:'MMM d, y, h:mm a' }}</span>
+            <h3>{{ order.productName }}</h3>
+            <p class="order-id">Order ID: {{ order.id }}</p>
+          </div>
+        </div>
+
+        <div class="order-meta">
+          <div class="price-status-group">
+            <span class="order-price">{{ order.price | number:'1.2-2' }} EUR</span>
+            <span class="status-badge">{{ order.status }}</span>
+          </div>
+
+          <button
+            type="button"
+            class="remove-btn"
+            (click)="deleteOrder(order.id)"
+            [disabled]="isDeleting(order.id)"
+            [attr.aria-disabled]="isDeleting(order.id)"
+            title="Cancel order"
+          >
+            X
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,18 +1,70 @@
-<section class="cat">
-<h1>hello world</h1>
-<div class="container">
-  <div class="row1">
-    <div class="card">
-      <h1>product1</h1>
+<div class="page-wrapper">
+  <div class="main-container">
+    <div class="header-action">
+      <h1 class="title">Catalog</h1>
+
+      <div class="search-container">
+        <input
+          type="text"
+          placeholder="Search products..."
+          (input)="onSearch($event)"
+          class="search-input"
+        />
+      </div>
+
+      <button class="btn-add" (click)="onOpenForm()">+ Add New Product</button>
     </div>
-    <div class="card">
-      <h1>product1</h1>
+
+    <div class="product-grid">
+      <div *ngFor="let prod of filteredProducts" class="product-card">
+        <button class="delete-btn" (click)="removeProduct(prod.id)">X</button>
+
+        <div class="image-container">
+          <img [src]="prod.imageUrl" [alt]="prod.name" />
+        </div>
+
+        <div class="card-content">
+          <h3 class="product-name">{{ prod.name }}</h3>
+          <div class="card-footer">
+            <span class="price">{{ prod.price | number: '1.2-2' }} EUR</span>
+            <button class="cart-btn" (click)="buyProduct(prod)">Buy</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="card">
-      <h1>product1</h1>
+
+    <div *ngIf="filteredProducts.length === 0" class="no-results">
+      No products found for "{{ searchTerm }}"
+    </div>
+
+    <div class="form-backdrop" *ngIf="showForm">
+      <div class="form-modal">
+        <h2>New Product</h2>
+        <form [formGroup]="productForm" (ngSubmit)="onCreateProduct()">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" formControlName="name" placeholder="e.g. MacBook Pro" />
+            <small class="error" *ngIf="isInvalid('name')">Required (min 2 chars).</small>
+          </div>
+
+          <div class="form-group">
+            <label>Price (EUR)</label>
+            <input type="number" step="0.01" formControlName="price" />
+            <small class="error" *ngIf="isInvalid('price')">Positive price required.</small>
+          </div>
+
+          <div class="form-group">
+            <label>Image URL</label>
+            <input type="url" formControlName="imageUrl" placeholder="https://..." />
+            <small class="error" *ngIf="isInvalid('imageUrl')">Valid URL required.</small>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="onCancel()">Cancel</button>
+            <button type="submit" class="btn-primary">Create Product</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-  <div class="row2"></div>
-  <div class="row3"></div>
 </div>
-</section>

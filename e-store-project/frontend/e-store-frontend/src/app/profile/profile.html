@@ -1,0 +1,27 @@
+<div class="profile-page" *ngIf="customer as user">
+  <div class="profile-card">
+    <p class="eyebrow">Mon profile</p>
+    <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+    <p class="subtitle">Votre compte est deja connecte.</p>
+
+    <div class="profile-grid">
+      <div class="profile-item">
+        <span class="label">Email</span>
+        <strong>{{ user.email }}</strong>
+      </div>
+      <div class="profile-item">
+        <span class="label">Telephone</span>
+        <strong>{{ user.phoneNumber || 'Not provided' }}</strong>
+      </div>
+      <div class="profile-item">
+        <span class="label">Address</span>
+        <strong>{{ user.address || 'Not provided' }}</strong>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a routerLink="/accueil" class="secondary-action">Retour accueil</a>
+      <button type="button" class="primary-action" (click)="logout()">Se deconnecter</button>
+    </div>
+  </div>
+</div>

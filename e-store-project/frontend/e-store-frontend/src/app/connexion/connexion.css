@@ -134,6 +134,12 @@
   cursor: not-allowed;
 }
 
+.error-text {
+  color: #c0342c;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
 /* .divider {
   display: flex;
   align-items: center;

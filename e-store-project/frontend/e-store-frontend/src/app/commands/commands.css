@@ -1,0 +1,154 @@
+.page-wrapper {
+  padding-top: 110px;
+  background-color: #fafaf9;
+  min-height: 100vh;
+}
+
+.main-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.summary-badge {
+  background: white;
+  padding: 12px 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  font-size: 1rem;
+  color: #444;
+}
+
+.summary-badge strong {
+  color: #bc5e41;
+  font-size: 1.1rem;
+}
+
+/* Order Cards */
+.order-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.02);
+  transition: transform 0.2s;
+}
+
+.order-card:hover {
+  transform: scale(1.01);
+}
+
+.order-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.img-wrapper {
+  width: 90px;
+  height: 90px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f3f3f1;
+}
+
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text-details h3 {
+  margin: 4px 0;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+}
+
+.order-date {
+  font-size: 0.8rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.order-id {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* Meta Section (Price & Actions) */
+.order-meta {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.price-status-group {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.order-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.status-badge {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 12px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: fit-content;
+  align-self: flex-end;
+}
+
+/* Remove Button Style */
+.remove-btn {
+  background: #fff;
+  color: #e63946;
+  border: 1px solid #fee2e2;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover {
+  background: #e63946;
+  color: white;
+  border-color: #e63946;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 80px 0;
+  color: #aaa;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}

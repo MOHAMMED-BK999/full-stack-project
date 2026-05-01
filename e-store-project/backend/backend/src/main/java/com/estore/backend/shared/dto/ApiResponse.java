@@ -1,4 +1,4 @@
-package com.estore.backend.shared.dao;
+package com.estore.backend.shared.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

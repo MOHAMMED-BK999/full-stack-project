@@ -1,0 +1,53 @@
+<div class="bills-container">
+  <h2 class="bills-header">My Bills & Invoices</h2>
+
+  <div *ngIf="bills.length === 0" class="empty-state">
+    <h3>No bills yet</h3>
+    <p>Your invoice history will appear here after you place orders.</p>
+  </div>
+
+  <div class="bills-grid" *ngIf="bills.length > 0">
+    <article class="bill-card" *ngFor="let bill of bills">
+      <div class="bill-top">
+        <div>
+          <p class="bill-label">Invoice</p>
+          <h3>#INV-{{ bill.id }}</h3>
+        </div>
+        <span class="status-badge" [ngClass]="getStatusClass(bill.status)">
+          {{ bill.status }}
+        </span>
+      </div>
+
+      <div class="bill-amount">
+        {{ bill.totalAmount | currency:'USD' }}
+      </div>
+
+      <div class="bill-details">
+        <div class="detail-item">
+          <span class="detail-label">Order ID</span>
+          <strong>{{ bill.orderId || 'N/A' }}</strong>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Customer</span>
+          <strong>{{ bill.customerName }}</strong>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Invoice Date</span>
+          <strong>{{ bill.date | date:'dd MMM yyyy, HH:mm' }}</strong>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Payment Date</span>
+          <strong>{{ bill.paymentDate ? (bill.paymentDate | date:'dd MMM yyyy, HH:mm') : 'Not paid yet' }}</strong>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Payment Method</span>
+          <strong>{{ bill.paymentMethod }}</strong>
+        </div>
+        <div class="detail-item full-width">
+          <span class="detail-label">Description</span>
+          <strong>{{ bill.description }}</strong>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
