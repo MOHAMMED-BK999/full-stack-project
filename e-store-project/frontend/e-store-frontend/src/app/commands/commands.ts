@@ -17,6 +17,7 @@ export class Commands implements OnInit {
   myOrders: Order[] = [];
   private readonly platformId = inject(PLATFORM_ID);
   private readonly deletingIds = new Set<string>();
+  private readonly updatingQtyIds = new Set<string>();
 
   constructor(
     private orderService: OrderService,
@@ -52,6 +53,10 @@ export class Commands implements OnInit {
     return this.deletingIds.has(orderId);
   }
 
+  isUpdatingQuantity(orderId: string): boolean {
+    return this.updatingQtyIds.has(orderId);
+  }
+
   /**
    * Calculates the total price of all purchases
    */
@@ -69,6 +74,12 @@ export class Commands implements OnInit {
   }
 
   deleteOrder(orderId: string) {
+    const id = String(orderId ?? '').trim();
+    if (!id) {
+      alert('Missing order id');
+      return;
+    }
+
     if (this.isDeleting(orderId)) {
       return;
     }
@@ -77,15 +88,15 @@ export class Commands implements OnInit {
       return;
     }
 
-    this.deletingIds.add(orderId);
+    this.deletingIds.add(id);
 
     this.orderService
-      .removeOrder(orderId)
-      .pipe(finalize(() => this.deletingIds.delete(orderId)))
+      .removeOrder(id)
+      .pipe(finalize(() => this.deletingIds.delete(id)))
       .subscribe({
         next: () => {
           // OrderService already updates the shared subject; keep local state consistent too.
-          this.myOrders = this.myOrders.filter((order) => order.id !== orderId);
+          this.myOrders = this.myOrders.filter((order) => order.id !== id);
           this.billService.loadBillsForCurrentCustomer().subscribe({
             next: () => {},
             error: (err) => console.error('Error refreshing bills', err),
@@ -101,6 +112,51 @@ export class Commands implements OnInit {
 
           alert(message);
           console.error('Error deleting order', err);
+        },
+      });
+  }
+
+  changeQuantity(order: Order, delta: number): void {
+    const id = String(order?.id ?? '').trim();
+    if (!id) {
+      alert('Missing order id');
+      return;
+    }
+
+    const nextQty = (order.quantity ?? 1) + delta;
+    // If user decrements from 1 to 0, treat it as removing/cancelling the order.
+    if (nextQty <= 0) {
+      this.deleteOrder(id);
+      return;
+    }
+
+    if (this.isUpdatingQuantity(id)) {
+      return;
+    }
+
+    this.updatingQtyIds.add(id);
+
+    this.orderService
+      .updateOrderQuantity(id, nextQty)
+      .pipe(finalize(() => this.updatingQtyIds.delete(id)))
+      .subscribe({
+        next: () => {
+          // Keep the list consistent with backend data (also ensures total price is correct).
+          this.refreshOrders();
+          this.billService.loadBillsForCurrentCustomer().subscribe({
+            next: () => {},
+            error: (err) => console.error('Error refreshing bills', err),
+          });
+        },
+        error: (err: unknown) => {
+          const message =
+            err instanceof HttpErrorResponse
+              ? err.error?.message || err.error?.error || err.message || 'Failed to update quantity'
+              : err instanceof Error
+                ? err.message
+                : 'Failed to update quantity';
+          alert(message);
+          console.error('Error updating quantity', err);
         },
       });
   }

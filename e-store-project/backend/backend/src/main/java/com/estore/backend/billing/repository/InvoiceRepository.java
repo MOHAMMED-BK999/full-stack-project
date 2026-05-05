@@ -4,7 +4,6 @@ import com.estore.backend.billing.entity.Invoice;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface InvoiceRepository extends MongoRepository<Invoice, String> {
@@ -12,5 +11,5 @@ public interface InvoiceRepository extends MongoRepository<Invoice, String> {
 
   List<Invoice> findByPaymentStatus(String paymentStatus);
 
-  Optional<Invoice> findByOrderId(String orderId);
+  List<Invoice> findByOrderId(String orderId);
 }

@@ -77,10 +77,36 @@ export class OrderService {
     const customer = this.customerService.getCurrentCustomer();
     // With Angular's fetch-based HttpClient, a 204 No Content response can surface as a body-parse error
     // if we leave the responseType as JSON. Treat it as text and map to void.
-    return this.http.delete(`${this.apiUrl}/${orderId}`, { responseType: 'text' }).pipe(
+    const id = encodeURIComponent(String(orderId ?? '').trim());
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' }).pipe(
       map(() => undefined),
       tap(() => {
         const nextOrders = this.ordersSubject.value.filter((order) => order.id !== orderId);
+        if (customer?.id) {
+          this.setOrders(String(customer.id), nextOrders);
+        } else {
+          this.ordersSubject.next(nextOrders);
+        }
+      })
+    );
+  }
+
+  updateOrderQuantity(orderId: string, quantity: number): Observable<Order> {
+    const customer = this.customerService.getCurrentCustomer();
+    if (!orderId?.trim()) {
+      throw new Error('Missing order id');
+    }
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+      throw new Error('Quantity must be greater than 0');
+    }
+
+    const id = encodeURIComponent(orderId.trim());
+    return this.http.put<any>(`${this.apiUrl}/${id}/quantity`, { quantity }).pipe(
+      map((order) => this.mapOrder(order)),
+      tap((updated) => {
+        const nextOrders = this.ordersSubject.value.map((order) =>
+          order.id === updated.id ? updated : order
+        );
         if (customer?.id) {
           this.setOrders(String(customer.id), nextOrders);
         } else {

@@ -4,6 +4,7 @@ import com.estore.backend.billing.dto.InvoiceRequest;
 import com.estore.backend.billing.entity.Invoice;
 import com.estore.backend.billing.repository.InvoiceRepository;
 import org.springframework.stereotype.Service;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -56,6 +57,22 @@ public class InvoiceService {
   }
 
   public void deleteInvoiceByOrderId(String orderId) {
-    invoiceRepository.findByOrderId(orderId).ifPresent(invoiceRepository::delete);
+    List<Invoice> invoices = invoiceRepository.findByOrderId(orderId);
+    if (invoices == null || invoices.isEmpty()) {
+      return;
+    }
+    invoiceRepository.deleteAll(invoices);
+  }
+
+  public void updateInvoiceTotalByOrderId(String orderId, BigDecimal totalAmount) {
+    List<Invoice> invoices = invoiceRepository.findByOrderId(orderId);
+    if (invoices == null || invoices.isEmpty()) {
+      return;
+    }
+
+    for (Invoice invoice : invoices) {
+      invoice.setTotalAmount(totalAmount);
+    }
+    invoiceRepository.saveAll(invoices);
   }
 }

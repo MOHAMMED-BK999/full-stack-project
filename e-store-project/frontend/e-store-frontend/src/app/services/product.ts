@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CustomerService } from './customer';
 
 export interface ProductPayload {
   name: string;
@@ -15,7 +16,7 @@ export class ProductService {
   // update this value (or better: move it to an environment config).
   private readonly apiUrl = 'http://localhost:8080/api/products';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private customerService: CustomerService) {}
 
   getProducts(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
@@ -29,10 +30,15 @@ export class ProductService {
       image: product.imageUrl.trim(),
     };
 
-    return this.http.post<any>(this.apiUrl, productRequest);
+    return this.http.post<any>(this.apiUrl, productRequest, { headers: this.buildAdminHeaders() });
   }
 
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.buildAdminHeaders() });
+  }
+
+  private buildAdminHeaders(): HttpHeaders {
+    const email = this.customerService.getCurrentCustomer()?.email?.trim().toLowerCase() ?? '';
+    return new HttpHeaders({ 'X-User-Email': email });
   }
 }

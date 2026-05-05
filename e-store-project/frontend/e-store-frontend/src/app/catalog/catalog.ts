@@ -5,6 +5,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { OrderService } from './order.service';
 import { ProductService } from '../services/product'; // Import your new service
 import { BillService } from '../bills/bill.service';
+import { CustomerService } from '../services/customer';
 
 interface Product {
   id?: number; // MongoDB IDs are strings
@@ -33,6 +34,7 @@ export class Catalog implements OnInit {
     private orderService: OrderService,
     private productService: ProductService, // Inject the Backend Service
     private billService: BillService,
+    private customerService: CustomerService,
     private cdr: ChangeDetectorRef
   ) {
     this.productForm = this.fb.group({
@@ -67,6 +69,10 @@ export class Catalog implements OnInit {
   }
 
   onCreateProduct() {
+    if (!this.isAdmin) {
+      alert('Admin access required');
+      return;
+    }
     if (this.productForm.valid) {
       // Send the new product to Spring Boot
       this.productService.addProduct(this.productForm.value).subscribe({
@@ -104,19 +110,11 @@ export class Catalog implements OnInit {
   buyProduct(product: Product) {
     this.orderService.addOrder(product).subscribe({
       next: (order) => {
-        this.billService.createBillForOrder(order).subscribe({
-          next: () => {
-            this.billService.loadBillsForCurrentCustomer().subscribe({
-              next: () => alert('Order saved successfully'),
-              error: () => alert('Order saved, but bills failed to refresh'),
-            });
-          },
-          error: () => {
-            this.billService.loadBillsForCurrentCustomer().subscribe({
-              next: () => alert('Order saved successfully'),
-              error: () => alert('Order saved, but bill creation failed'),
-            });
-          },
+        // Backend already creates the invoice when placing the order.
+        // Just refresh bills so UI stays in sync.
+        this.billService.loadBillsForCurrentCustomer().subscribe({
+          next: () => alert('Order saved successfully'),
+          error: () => alert('Order saved, but bills failed to refresh'),
         });
       },
       error: (err: HttpErrorResponse | Error) => {
@@ -130,6 +128,10 @@ export class Catalog implements OnInit {
   }
 
   onOpenForm() {
+    if (!this.isAdmin) {
+      alert('Admin access required');
+      return;
+    }
     this.productForm.reset();
     this.showForm = true;
   }
@@ -139,6 +141,10 @@ export class Catalog implements OnInit {
   }
 
   removeProduct(id:number | undefined) {
+    if (!this.isAdmin) {
+      alert('Admin access required');
+      return;
+    }
     if (id === undefined) {
       return;
     }
@@ -164,5 +170,9 @@ export class Catalog implements OnInit {
   isInvalid(controlName: string): boolean {
     const control = this.productForm.get(controlName);
     return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  get isAdmin(): boolean {
+    return this.customerService.isAdmin();
   }
 }

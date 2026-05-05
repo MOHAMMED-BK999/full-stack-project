@@ -29,6 +29,29 @@
         <div class="order-meta">
           <div class="price-status-group">
             <span class="order-price">{{ order.price | number:'1.2-2' }} EUR</span>
+            <div class="qty-control" aria-label="Quantity controls">
+              <button
+                type="button"rve
+                class="qty-btn"
+                (click)="changeQuantity(order, -1)"
+                [disabled]="isUpdatingQuantity(order.id) || isDeleting(order.id)"
+                [attr.aria-disabled]="isUpdatingQuantity(order.id) || isDeleting(order.id)"
+                title="Decrease quantity"
+              >
+                -
+              </button>
+              <span class="qty-value">{{ order.quantity }}</span>
+              <button
+                type="button"
+                class="qty-btn"
+                (click)="changeQuantity(order, 1)"
+                [disabled]="isUpdatingQuantity(order.id)"
+                [attr.aria-disabled]="isUpdatingQuantity(order.id)"
+                title="Increase quantity"
+              >
+                +
+              </button>
+            </div>
             <span class="status-badge">{{ order.status }}</span>
           </div>
 
@@ -47,4 +70,3 @@
     </div>
   </div>
 </div>
-

@@ -12,12 +12,12 @@
         />
       </div>
 
-      <button class="btn-add" (click)="onOpenForm()">+ Add New Product</button>
+      <button class="btn-add" *ngIf="isAdmin" (click)="onOpenForm()">+ Add New Product</button>
     </div>
 
     <div class="product-grid">
       <div *ngFor="let prod of filteredProducts" class="product-card">
-        <button class="delete-btn" (click)="removeProduct(prod.id)">X</button>
+        <button class="delete-btn" *ngIf="isAdmin" (click)="removeProduct(prod.id)">X</button>
 
         <div class="image-container">
           <img [src]="prod.imageUrl" [alt]="prod.name" />
@@ -37,7 +37,7 @@
       No products found for "{{ searchTerm }}"
     </div>
 
-    <div class="form-backdrop" *ngIf="showForm">
+    <div class="form-backdrop" *ngIf="showForm && isAdmin">
       <div class="form-modal">
         <h2>New Product</h2>
         <form [formGroup]="productForm" (ngSubmit)="onCreateProduct()">

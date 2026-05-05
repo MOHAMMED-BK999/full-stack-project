@@ -25,6 +25,7 @@ export class CustomerService {
   // update this value (or better: move it to an environment config).
   private readonly apiUrl = 'http://localhost:8080/api/customers';
   private readonly storageKey = 'nexshop_current_customer';
+  private readonly adminEmail = 'mohamedbarik2005@gmail.com';
   private readonly currentCustomerSubject = new BehaviorSubject<Customer | null>(null);
   readonly currentCustomer$ = this.currentCustomerSubject.asObservable();
 
@@ -61,6 +62,25 @@ export class CustomerService {
     );
   }
 
+  updateProfile(updates: Partial<Customer>): Observable<Customer> {
+    const current = this.getCurrentCustomer();
+    if (!current?.email) {
+      throw new Error('You must be logged in to update your profile');
+    }
+
+    const email = current.email.trim().toLowerCase();
+    const payload: any = {};
+
+    if (updates.firstName !== undefined) payload.firstName = updates.firstName;
+    if (updates.lastName !== undefined) payload.lastName = updates.lastName;
+    if (updates.phoneNumber !== undefined) payload.phoneNumber = updates.phoneNumber;
+    if (updates.address !== undefined) payload.address = updates.address;
+
+    return this.http.put<Customer>(`${this.apiUrl}/${encodeURIComponent(email)}`, payload).pipe(
+      tap((customer) => this.replaceSessionCustomer(customer))
+    );
+  }
+
   logout(): void {
     this.clearSession();
     this.currentCustomerSubject.next(null);
@@ -74,6 +94,11 @@ export class CustomerService {
     return this.currentCustomerSubject.value !== null;
   }
 
+  isAdmin(): boolean {
+    const email = this.currentCustomerSubject.value?.email;
+    return !!email && email.trim().toLowerCase() === this.adminEmail;
+  }
+
   private persistSession(customer: Customer, rememberMe: boolean): void {
     this.clearSession();
     this.currentCustomerSubject.next(customer);
@@ -84,6 +109,23 @@ export class CustomerService {
 
     const storage = rememberMe ? window.localStorage : window.sessionStorage;
     storage.setItem(this.storageKey, JSON.stringify(customer));
+  }
+
+  private replaceSessionCustomer(customer: Customer): void {
+    this.currentCustomerSubject.next(customer);
+
+    if (!this.isBrowser()) {
+      return;
+    }
+
+    // Update whichever storage currently holds the session (remember-me or not).
+    const asJson = JSON.stringify(customer);
+    if (window.localStorage.getItem(this.storageKey) !== null) {
+      window.localStorage.setItem(this.storageKey, asJson);
+    }
+    if (window.sessionStorage.getItem(this.storageKey) !== null) {
+      window.sessionStorage.setItem(this.storageKey, asJson);
+    }
   }
 
   private restoreSession(): void {

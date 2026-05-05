@@ -59,9 +59,37 @@ public class OrderService {
   }
 
   public void cancelOrder(String id) {
+    // Deleting should be best-effort and idempotent: if the order doesn't exist, treat as success.
+    // Also avoid coupling deletion to a prior read, which can fail if the client holds a stale/invalid id.
+    invoiceService.deleteInvoiceByOrderId(id);
+    orderRepository.deleteById(id);
+  }
+
+  public void cancelOrdersByCustomerId(String customerId) {
+    var orders = orderRepository.findByCustomerId(customerId);
+    for (Order order : orders) {
+      invoiceService.deleteInvoiceByOrderId(order.getId());
+    }
+    orderRepository.deleteAll(orders);
+  }
+
+  public Order updateOrderQuantity(String id, int quantity) {
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("Quantity must be greater than 0");
+    }
+
     Order order = getOrderById(id);
-    invoiceService.deleteInvoiceByOrderId(order.getId());
-    orderRepository.delete(order);
+    order.setQuantity(quantity);
+
+    if (order.getPrice() != null) {
+      order.setTotalPrice(order.getPrice().multiply(BigDecimal.valueOf(quantity)));
+    }
+
+    Order saved = orderRepository.save(order);
+    if (saved.getTotalPrice() != null) {
+      invoiceService.updateInvoiceTotalByOrderId(saved.getId(), saved.getTotalPrice());
+    }
+    return saved;
   }
 
   public List<Order> getOrdersByStatus(String status) {
