@@ -12,17 +12,10 @@ public class Product {
     @Id
     private int id;
     private String name;
-    private String description;
+//    private String description;
     private BigDecimal price;
-    /**
-     * Backward-compatible field used by the frontend to render the product image.
-     * We now set this to an internal URL like: /api/products/{id}/image
-     */
-    private String imageUrl;
 
-    /**
-     * The actual image is stored in MongoDB GridFS.
-     */
+    private String imageUrl;
     private String imageFileId;
     private String imageContentType;
     private String imageFilename;

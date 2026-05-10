@@ -1,4 +1,11 @@
-import { afterNextRender, ChangeDetectorRef, Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -35,7 +42,7 @@ export class Catalog implements OnInit {
     private productService: ProductService, // Inject the Backend Service
     private billService: BillService,
     private customerService: CustomerService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -61,10 +68,13 @@ export class Catalog implements OnInit {
   loadProducts() {
     this.productService.getProducts().subscribe({
       next: (data) => {
-        this.products = [...data];
+        this.products = data.map((prod) => ({
+          ...prod,
+          imageUrl: `http://localhost:8080${prod.imageUrl}`,
+        }));
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error fetching from backend:', err)
+      error: (err) => console.error('Error fetching from backend:', err),
     });
   }
 
@@ -77,19 +87,20 @@ export class Catalog implements OnInit {
       // Send the new product to Spring Boot
       this.productService.addProduct(this.productForm.value).subscribe({
         next: (newProduct) => {
-          this.products = [newProduct, ...this.products]; // Add the saved product (with ID) to UI
+          const mappedProduct = {
+            ...newProduct,
+            imageUrl: `http://localhost:8080${newProduct.imageUrl}`,
+          };
+          this.products = [mappedProduct, ...this.products]; // Add the saved product (with ID) to UI
           this.showForm = false;
           this.productForm.reset();
           this.cdr.detectChanges();
         },
         error: (err: HttpErrorResponse) => {
           const message =
-            err.error?.message ||
-            err.error?.error ||
-            err.message ||
-            'Failed to save product';
+            err.error?.message || err.error?.error || err.message || 'Failed to save product';
           alert(message);
-        }
+        },
       });
     } else {
       this.productForm.markAllAsTouched();
@@ -98,8 +109,8 @@ export class Catalog implements OnInit {
 
   // --- Filtering Logic ---
   get filteredProducts() {
-    return this.products.filter(p =>
-      p.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    return this.products.filter((p) =>
+      p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
     );
   }
 
@@ -140,7 +151,7 @@ export class Catalog implements OnInit {
     this.showForm = false;
   }
 
-  removeProduct(id:number | undefined) {
+  removeProduct(id: number | undefined) {
     if (!this.isAdmin) {
       alert('Admin access required');
       return;
@@ -157,10 +168,7 @@ export class Catalog implements OnInit {
         },
         error: (err: HttpErrorResponse) => {
           const message =
-            err.error?.message ||
-            err.error?.error ||
-            err.message ||
-            'Failed to delete product';
+            err.error?.message || err.error?.error || err.message || 'Failed to delete product';
           alert(message);
         },
       });

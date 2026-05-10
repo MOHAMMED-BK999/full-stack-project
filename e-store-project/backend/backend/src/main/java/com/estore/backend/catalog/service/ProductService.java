@@ -84,7 +84,7 @@ public class ProductService {
 
     private void applyChanges(Product product, ProductRequest request) {
         product.setName(request.name().trim());
-        product.setDescription(request.description() == null ? null : request.description().trim());
+//        product.setDescription(request.description() == null ? null : request.description().trim());
         product.setPrice(request.price());
         // Backward compatible: request.image is still a URL string, but we now "stock" the image
         // in MongoDB (GridFS) and serve it from our own endpoint.

@@ -35,13 +35,13 @@ public class ProductImageService {
             String fileId,
             @Nullable String contentType,
             @Nullable String filename,
-            long size
-    ) {}
+            long size) {
+    }
 
-    public ProductImageService(GridFsTemplate gridFsTemplate, GridFSBucket gridFsBucket) {
+    public ProductImageService(GridFsTemplate gridFsTemplate, GridFSBucket gridFsBucket, RestTemplate restTemplate) {
         this.gridFsTemplate = gridFsTemplate;
         this.gridFsBucket = gridFsBucket;
-        this.restTemplate = new RestTemplate();
+        this.restTemplate = restTemplate;
     }
 
     public StoredImage store(MultipartFile file) {
@@ -52,7 +52,8 @@ public class ProductImageService {
             throw new IllegalArgumentException("Image is too large (max " + MAX_IMAGE_BYTES + " bytes)");
         }
 
-        String filename = StringUtils.hasText(file.getOriginalFilename()) ? file.getOriginalFilename() : "product-image";
+        String filename = StringUtils.hasText(file.getOriginalFilename()) ? file.getOriginalFilename()
+                : "product-image";
         String contentType = file.getContentType();
         if (StringUtils.hasText(contentType) && !contentType.toLowerCase().startsWith("image/")) {
             throw new IllegalArgumentException("Invalid content type: " + contentType);
@@ -82,7 +83,13 @@ public class ProductImageService {
         try {
             resp = restTemplate.getForEntity(uri, byte[].class);
         } catch (RestClientException e) {
-            throw new IllegalArgumentException("Failed to download image from URL");
+            String errorMsg = "Failed to download image from URL: " + e.getMessage();
+            if (e.getCause() != null) {
+                errorMsg += " (" + e.getCause().getClass().getSimpleName() + ": " + e.getCause().getMessage() + ")";
+            }
+            throw new IllegalArgumentException(errorMsg);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to download image from URL: " + e.getMessage(), e);
         }
 
         byte[] body = Optional.ofNullable(resp.getBody()).orElse(new byte[0]);
